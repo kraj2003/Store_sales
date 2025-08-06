@@ -1,0 +1,9 @@
+uvicorn
+pandas 
+Scikit-learn
+uvicorn
+matplotlib
+FastAPI
+mlflow
+seaborn
+dvc
