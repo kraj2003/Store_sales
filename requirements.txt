@@ -4,6 +4,6 @@ Scikit-learn
 uvicorn
 matplotlib
 FastAPI
-mlflow
+mlflow<3
 seaborn
 dvc

@@ -54,7 +54,7 @@ class SalesModel:
                     mlflow.log_metric("r2", r2)
                     
                     # Log model
-                    mlflow.sklearn.log_model(model, f"{name}_model")
+                    mlflow.sklearn.log_model(model, name=f"{name}_model")
                 
                 print(f"{name}: MAE = {mae}")
                 print(f"{name}: MSE = {mse}")
