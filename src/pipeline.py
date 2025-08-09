@@ -2,11 +2,14 @@ import pandas as pd
 from process import *
 import mlflow
 from model import SalesModel
+import dagshub
 
+dagshub.init(repo_owner='kraj2003', repo_name='Store_sales', mlflow=True)
+mlflow.set_experiment("sales_forecasting_pipeline")
 def run_pipeline():
     """Main forecasting pipeline"""
     print("=== Sales Forecasting Pipeline ===\n")
-    mlflow.end_run() 
+    # mlflow.end_run() 
     # Start main pipeline run
     with mlflow.start_run(run_name="sales_forecasting_pipeline"):
 

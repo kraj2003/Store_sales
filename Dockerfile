@@ -1,6 +1,6 @@
 
 # Useing an official Python runtime as a base image
-FROM :3.9-slim
+FROM python:3.9-slim
 
 # working directory
 WORKDIR /app
