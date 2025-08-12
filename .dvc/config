@@ -1,2 +1,4 @@
+[core]
+    remote = dagshub
 ['remote "dagshub"']
     url = https://dagshub.com/kraj2003/Store_sales.dvc
