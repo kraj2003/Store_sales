@@ -1,8 +1,2 @@
-[core]
-    remote = myremote
 ['remote "dagshub"']
-    url = https://dagshub.com/kraj2003/Store_sales.dvc
-['remote "myremote"']
-    url = ../../dvc-storage
-['remote "origin"']
     url = https://dagshub.com/kraj2003/Store_sales.dvc
