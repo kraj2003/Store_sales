@@ -1,7 +1,7 @@
 venv
 src/mlruns
-data
-models
+data/
+models/
 src/monitor_performance.py
 src/retrain_system.py
 src/scheduler.py
