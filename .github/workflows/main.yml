@@ -62,7 +62,7 @@ jobs:
           DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
-          python src/pipeline.py
+          python src\pipeline.py
           # Push updated model
           dvc add models
           dvc push models.dvc
