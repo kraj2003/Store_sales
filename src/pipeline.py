@@ -5,6 +5,7 @@ import os
 from model import SalesModel
 import dagshub
 
+dagshub.auth.add_app_token(token=os.getenv("DAGSHUB_TOKEN"))
 dagshub.init(repo_owner='kraj2003', repo_name='Store_sales', mlflow=True)
 mlflow.set_experiment("sales_forecasting_pipeline")
 def run_pipeline():
