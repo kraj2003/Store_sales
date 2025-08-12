@@ -96,7 +96,7 @@ class SalesModel:
     def save(self):
         """Save the best model"""
         try:
-            joblib.dump(self.best_model, '../models/best_model.pkl')
+            joblib.dump(self.best_model, './models/best_model.pkl')
             print("Model saved!")
         except Exception as e:
             print(f"Error saving model: {e}")

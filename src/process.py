@@ -3,7 +3,7 @@ import numpy as np
 
 def load_data():
     """Load the training data"""
-    df = pd.read_csv('../data/train.csv')
+    df = pd.read_csv('./data/train.csv')
     df['date'] = pd.to_datetime(df['date'])
     return df
 
@@ -43,5 +43,5 @@ def get_features():
 
 def save_daily_sales(df):
     """Save processed daily sales"""
-    df.to_csv('../data/daily_sales.csv', index=False)
+    df.to_csv('./data/daily_sales.csv', index=False)
     print("Saved daily_sales.csv")
