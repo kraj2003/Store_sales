@@ -35,8 +35,13 @@ jobs:
         env:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
+          # Add remote if it doesn't exist
+          dvc remote add origin https://dagshub.com/kraj2003/Sales_store.dvc || true
+          dvc remote default origin
+          # Configure authentication
           dvc remote modify origin --local auth token
           dvc remote modify origin --local token $DAGSHUB_TOKEN
+          # Pull data
           dvc pull || echo "Nothing to pull"
       
       - name: Check if retrain needed
