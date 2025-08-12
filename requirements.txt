@@ -9,3 +9,6 @@ seaborn
 dvc
 dagshub
 schedule
+pandas
+dvc[s3]>=2.0.0
+joblib>=1.0.0
