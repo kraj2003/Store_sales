@@ -86,24 +86,14 @@ jobs:
           git commit -m "Update model [skip ci]" || echo "No changes"
           git push || echo "Nothing to push"
       
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Build and push Docker image
-        run: |
-          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/sales-forecasting:latest" | tr '[:upper:]' '[:lower:]')
-          docker build -t $IMAGE_NAME .
-          # docker push $IMAGE_NAME
-      
-      - name: Deploy (placeholder)
-        run: |
-          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/sales-forecasting:latest" | tr '[:upper:]' '[:lower:]')
-          echo "Deploying application..."
-          echo "Model retrained: ${{ steps.retrain_check.outputs.retrain }}"
-          echo "Docker image pushed to: $IMAGE_NAME"
-          echo "Run with: docker run -p 8000:8000 $IMAGE_NAME"
-          # Add your actual deployment commands here
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myproject:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/myproject:latest
