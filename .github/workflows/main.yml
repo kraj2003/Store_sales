@@ -64,7 +64,7 @@ jobs:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           python src/pipeline.py
-          # Push updated model
+          # Push updated mode
           dvc add models
           dvc push models.dvc
           git config user.name "GitHub Actions"
