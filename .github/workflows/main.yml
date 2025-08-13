@@ -12,6 +12,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v4
       
@@ -46,11 +49,7 @@ jobs:
           
           # Debug: Check if data exists
           ls -la data/ || echo "Data directory not found"
-      - name: Set MLflow env
-        run: |
-          export MLFLOW_TRACKING_URI=https://dagshub.com/kraj2003/Store_sales.mlflow
-          export MLFLOW_TRACKING_USERNAME=${{ secrets.DAGSHUB_USERNAME }}
-          export MLFLOW_TRACKING_PASSWORD=${{ secrets.DAGSHUB_TOKEN }}
+
       - name: Check if retrain needed
         id: retrain_check
         run: |
@@ -66,9 +65,12 @@ jobs:
         env:
           DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+          MLFLOW_TRACKING_URI: https://dagshub.com/kraj2003/Store_sales.mlflow
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           python src/pipeline.py
-          # Push updated mode
+          # Push updated model
           dvc add models
           dvc push models.dvc
           git config user.name "GitHub Actions"
@@ -77,12 +79,22 @@ jobs:
           git commit -m "Update model [skip ci]" || echo "No changes"
           git push || echo "Nothing to push"
       
-      - name: Build Docker image
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build and push Docker image
         run: |
-          docker build -t sales-forecasting:latest .
+          docker build -t ghcr.io/${{ github.repository }}/sales-forecasting:latest .
+          docker push ghcr.io/${{ github.repository }}/sales-forecasting:latest
       
       - name: Deploy (placeholder)
         run: |
           echo "Deploying application..."
           echo "Model retrained: ${{ steps.retrain_check.outputs.retrain }}"
+          echo "Docker image pushed to: ghcr.io/${{ github.repository }}/sales-forecasting:latest"
+          echo "Run with: docker run -p 8000:8000 ghcr.io/${{ github.repository }}/sales-forecasting:latest"
           # Add your actual deployment commands here
