@@ -12,9 +12,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
     steps:
       - uses: actions/checkout@v4
       
@@ -49,7 +46,7 @@ jobs:
           
           # Debug: Check if data exists
           ls -la data/ || echo "Data directory not found"
-
+      
       - name: Check if retrain needed
         id: retrain_check
         run: |
@@ -65,9 +62,6 @@ jobs:
         env:
           DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
-          MLFLOW_TRACKING_URI: https://dagshub.com/kraj2003/Store_sales.mlflow
-          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
-          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           python src/pipeline.py
           # Push updated model
@@ -79,24 +73,12 @@ jobs:
           git commit -m "Update model [skip ci]" || echo "No changes"
           git push || echo "Nothing to push"
       
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Build and push Docker image
+      - name: Build Docker image
         run: |
-          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/sales-forecasting:latest" | tr '[:upper:]' '[:lower:]')
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
+          docker build -t sales-forecasting:latest .
       
       - name: Deploy (placeholder)
         run: |
-          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/sales-forecasting:latest" | tr '[:upper:]' '[:lower:]')
           echo "Deploying application..."
           echo "Model retrained: ${{ steps.retrain_check.outputs.retrain }}"
-          echo "Docker image pushed to: $IMAGE_NAME"
-          echo "Run with: docker run -p 8000:8000 $IMAGE_NAME"
           # Add your actual deployment commands here
