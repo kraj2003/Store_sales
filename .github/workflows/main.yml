@@ -88,13 +88,15 @@ jobs:
       
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/sales-forecasting:latest .
-          docker push ghcr.io/${{ github.repository }}/sales-forecasting:latest
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/sales-forecasting:latest" | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
       
       - name: Deploy (placeholder)
         run: |
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}/sales-forecasting:latest" | tr '[:upper:]' '[:lower:]')
           echo "Deploying application..."
           echo "Model retrained: ${{ steps.retrain_check.outputs.retrain }}"
-          echo "Docker image pushed to: ghcr.io/${{ github.repository }}/sales-forecasting:latest"
-          echo "Run with: docker run -p 8000:8000 ghcr.io/${{ github.repository }}/sales-forecasting:latest"
+          echo "Docker image pushed to: $IMAGE_NAME"
+          echo "Run with: docker run -p 8000:8000 $IMAGE_NAME"
           # Add your actual deployment commands here
